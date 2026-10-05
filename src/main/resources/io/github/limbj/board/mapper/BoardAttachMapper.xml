@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.limbj.board.mapper.BoardAttachMapper">
+    <resultMap id="attachment" type="io.github.limbj.board.domain.BoardAttachVO">
+        <id property="uuid" column="uuid" />
+        <result property="uploadPath" column="uploadpath" />
+        <result property="fileName" column="filename" />
+        <result property="fileType" column="filetype" javaType="boolean" jdbcType="CHAR"
+                typeHandler="io.github.limbj.board.configuration.CharBooleanTypeHandler" />
+        <result property="bno" column="bno" />
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO tbl_attach (uuid, uploadpath, filename, filetype, bno)
+        VALUES (#{uuid}, #{uploadPath}, #{fileName},
+                #{fileType,jdbcType=CHAR,typeHandler=io.github.limbj.board.configuration.CharBooleanTypeHandler}, #{bno})
+    </insert>
+    <select id="findByBno" resultMap="attachment">
+        SELECT * FROM tbl_attach WHERE bno = #{bno} ORDER BY uuid
+    </select>
+    <select id="findByUuid" resultMap="attachment">SELECT * FROM tbl_attach WHERE uuid = #{uuid}</select>
+    <select id="findByUploadPath" resultMap="attachment">
+        SELECT * FROM tbl_attach WHERE uploadpath = #{uploadPath} ORDER BY uuid
+    </select>
+    <delete id="deleteAll">DELETE FROM tbl_attach WHERE bno = #{bno}</delete>
+</mapper>

@@ -1,0 +1,23 @@
+<%@ page pageEncoding="UTF-8" %>
+<c:choose><c:when test="${editing}"><c:url var="saveUrl" value="/board/modify" /></c:when><c:otherwise><c:url var="saveUrl" value="/board/register" /></c:otherwise></c:choose>
+<c:set var="editorPage" value="${empty cri ? 1 : cri.pageNum}" />
+<c:set var="editorAmount" value="${empty cri ? 10 : cri.amount}" />
+<c:url var="listUrl" value="/board/list"><c:param name="pageNum" value="${editorPage}" /><c:param name="amount" value="${editorAmount}" /><c:param name="type" value="${cri.type}" /><c:param name="keyword" value="${cri.keyword}" /></c:url>
+<a class="back-link" href="<c:out value='${listUrl}' />">← 게시글 목록</a>
+<section class="page-heading"><div><p class="eyebrow">SHARE YOUR STORY</p><h1><c:out value="${pageTitle}" /></h1><p>생각을 글로, 유용한 자료를 첨부파일로 나눠 보세요.</p></div></section>
+<form id="editor-form" class="card editor-card" action="<c:out value='${saveUrl}' />" method="post" data-editing="${editing}" data-bno="<c:out value='${board.bno}' />">
+  <input type="hidden" name="_csrf" value="<c:out value='${requestScope.csrfToken}' />">
+  <input type="hidden" name="attachmentsSubmitted" value="${editing ? 'false' : 'true'}">
+  <c:if test="${editing}"><input type="hidden" name="bno" value="<c:out value='${board.bno}' />"></c:if>
+  <input type="hidden" name="pageNum" value="<c:out value='${editorPage}' />"><input type="hidden" name="amount" value="<c:out value='${editorAmount}' />"><input type="hidden" name="type" value="<c:out value='${cri.type}' />"><input type="hidden" name="keyword" value="<c:out value='${cri.keyword}' />">
+  <div class="field"><label for="post-title">제목</label><input id="post-title" name="title" value="<c:out value='${board.title}' />" placeholder="어떤 이야기를 나누고 싶으세요?" maxlength="200" required></div>
+  <div class="field"><label for="post-content">내용</label><textarea id="post-content" name="content" rows="12" maxlength="20000" placeholder="이야기를 자유롭게 적어 주세요." required><c:out value="${board.content}" /></textarea></div>
+  <div class="field field-author"><label for="post-writer">작성자</label><input id="post-writer" name="writer" value="<c:out value='${board.writer}' />" maxlength="50" placeholder="게시판에 표시할 이름" required ${editing ? 'readonly' : ''}></div>
+  <section class="upload-section" aria-label="첨부파일"><div class="section-heading"><div><h2>첨부파일</h2><p class="muted">이미지와 문서를 최대 10개까지 첨부할 수 있어요.</p></div><label class="button button-secondary upload-picker" for="upload-input">＋ 파일 선택</label></div>
+    <input class="sr-only" id="upload-input" type="file" name="uploadFile" multiple accept=".png,.jpg,.jpeg,.gif,.pdf,.txt,.docx,.xlsx,.pptx">
+    <p class="field-help">파일당 5MB 미만 · PNG, JPG, GIF, PDF, TXT, DOCX, XLSX, PPTX</p>
+    <p id="upload-status" class="muted" role="status">첨부파일을 선택하면 업로드됩니다.</p>
+    <div class="uploadResult"><ul aria-label="선택한 첨부파일"></ul></div>
+  </section>
+  <div class="form-actions"><a class="button button-secondary" href="<c:out value='${listUrl}' />">취소</a><button id="save-post" class="button" type="submit" ${editing ? 'disabled' : ''}><c:choose><c:when test="${editing}">변경 사항 저장</c:when><c:otherwise>게시글 등록</c:otherwise></c:choose></button></div>
+</form>

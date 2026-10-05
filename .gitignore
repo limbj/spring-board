@@ -1,0 +1,35 @@
+# Build outputs and local tools
+/target/
+/local/
+/.tools/
+/runtime/
+/data/
+/uploads/
+*.war
+*.zip
+*.class
+
+# Local database and private configuration
+*.mv.db
+*.trace.db
+*.lock.db
+.env
+.env.*
+!.env.example
+application-local.properties
+*.log
+
+# IDE
+.classpath
+.project
+.settings/
+.springBeans
+.metadata/
+bin/
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
